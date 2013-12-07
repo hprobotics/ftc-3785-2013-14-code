@@ -30,7 +30,7 @@
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "3785_motion_functions.h"	//Motion fuctions such as forwards and backwards
 #include "IRScanner.h"
-#include "AutoSubRoutines.h"
+#include "InnerSubRoutines.h"
 
 const int FLAG_ARM_OUT = 85;
 const int FLAG_ARM_IN = 195;
