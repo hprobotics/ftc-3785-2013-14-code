@@ -89,7 +89,7 @@ task main()
 	switch(position)
 	{
 		case 0:
-		crate4();
+		crate1();
 		break;
 		case 1:
 		crate1();
@@ -98,10 +98,10 @@ task main()
 		crate2();
 		break;
 	  case 3:
-	  crate3();
+	  crate1();
 		break;
 		case 4:
-		crate4();
+		crate1();
 		break;
 	}
 }

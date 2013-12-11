@@ -1,7 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S2, HTMotor,  HTServo,  HTServo,  none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S2,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     MUX,            sensorI2CCustomFastSkipStates)
 #pragma config(Sensor, S4,     IRSensor,       sensorI2CCustomFastSkipStates9V)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, reversed, encoder)
@@ -32,7 +30,7 @@
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "3785_motion_functions.h"	//Motion fuctions such as forwards and backwards
 #include "IRScanner.h"
-#include "InnerSubRoutines.h"
+#include "OuterSubRoutines.h"
 
 const int FLAG_ARM_OUT = 85;
 const int FLAG_ARM_IN = 195;
@@ -77,19 +75,17 @@ task main()
 
   clearDebugStream();
 	zones.size=3;
-	int borders[4] = {125,  190, 215, 233};
+	int borders[4] = {125,  180, 215, 230};
 	int values[3]  = {        1,   2,   3};
 	zones.border=&borders;
 	zones.value=&values;
 	int position=0;
 	position = scanIR(IRSensor, zones);
 
-	turnRight(-75,1800);
-
 	switch(position)
 	{
 		case 0:
-		crate4();
+		crate1();
 		break;
 		case 1:
 		crate1();
@@ -98,10 +94,10 @@ task main()
 		crate2();
 		break;
 	  case 3:
-	  crate3();
+	  crate1();
 		break;
 		case 4:
-		crate4();
+		crate1();
 		break;
 	}
 }
