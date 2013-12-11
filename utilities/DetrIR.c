@@ -30,7 +30,6 @@
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "3785_motion_functions.h"	//Motion fuctions such as forwards and backwards
 #include "IRScanner.h"
-#include "OuterSubRoutines.h"
 
 const int FLAG_ARM_OUT = 85;
 const int FLAG_ARM_IN = 195;
@@ -60,44 +59,27 @@ void initializeRobot()
 	servo[Winch]=WINCH_UP;
 	servo[FlagTwist]=FLAG_ARM_IN;
 	servo[IRServo]=255;
-	servo[AutoArm]=AUTO_LIFT_INIT;
-	servo[AutoWrist]=AUTO_TWIST_INIT;
-  return;
+	return;
 }
 
 ZoneBoundaries zones;
 
 task main()
 {
-  initializeRobot();
+	initializeRobot();
 
-  waitForStart(); // Wait for the beginning of autonomous phase.
+	waitForStart(); // Wait for the beginning of autonomous phase.
 
-  clearDebugStream();
+	clearDebugStream();
 	zones.size=3;
-	int borders[4] = {125,  180, 215, 230};
+	int borders[4] = {0,  180, 215, 230};
 	int values[3]  = {        1,   2,   3};
 	zones.border=&borders;
 	zones.value=&values;
 	int position=0;
-	position = scanIR(IRSensor, zones);
-
-	switch(position)
+	while(true)
 	{
-		case 0:
-		crate4();
-		break;
-		case 1:
-		crate1();
-		break;
-		case 2:
-		crate2();
-		break;
-	  case 3:
-	  crate3();
-		break;
-		case 4:
-		crate4();
-		break;
+		position = scanIR(IRSensor, zones);
+		writeDebugStreamLine("%i",position);
 	}
 }

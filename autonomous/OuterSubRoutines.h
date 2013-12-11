@@ -4,38 +4,38 @@ void primeCube();
 
 void dropAtPos(int distance)
 {
+	straight(-75,distance);
 	primeCube();
-	straight(-50,distance);
 	dropCube();
-	straight(50,distance);
 	lowerCube();
-	turnRight(-50,2000);
-	straight(50,36);
-	turnRight(-50,2000);
-	straight(50,48);
+	straight(75,distance);
+	turnRight(-75,1750);
+	straight(75,46);
+	turnRight(-75,1300);
+	straight(75,52);
 }
 void crate1()
 {
 	writeDebugStreamLine("Crate 1");
-	dropAtPos(18);
+	dropAtPos(12);
 }
 
 void crate2()
 {
 	writeDebugStreamLine("Crate 2");
-  dropAtPos(28);
+  dropAtPos(24);
 }
 
 void crate3()
 {
 	writeDebugStreamLine("Crate 3");
-	dropAtPos(42);
+	dropAtPos(57);
 }
 
 void crate4()
 {
 	writeDebugStreamLine("Crate 4");
-	dropAtPos(52);
+	dropAtPos(67);
 }
 
 const int AUTO_LIFT_INIT=120;

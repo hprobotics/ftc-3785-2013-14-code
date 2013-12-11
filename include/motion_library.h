@@ -115,7 +115,7 @@ void turnRight(int power, int encoder)
 			wait1Msec(20);
 		}
 		rightSpeed(currentPower);
-		leftSpeed(currentPower);
+		leftSpeed(-currentPower);
 	}
 	rightSpeed(0);
 	leftSpeed(0);

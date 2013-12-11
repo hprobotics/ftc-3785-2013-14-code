@@ -7,14 +7,14 @@
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     RightBack,     tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C1_2,     LeftBack,      tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     RightBack,     tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     LeftBack,      tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     Arm1,          tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     Arm2,          tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     CubeLift,      tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     Flag,          tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S2_C1_1,     RightFront,    tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S2_C1_2,     LeftFront,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S2_C1_1,     RightFront,    tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S2_C1_2,     LeftFront,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Servo,  srvo_S2_C2_1,    Intake1,              tServoContinuousRotation)
 #pragma config(Servo,  srvo_S2_C2_2,    Intake2,              tServoContinuousRotation)
 #pragma config(Servo,  srvo_S2_C2_3,    servo3,               tServoNone)
@@ -31,7 +31,7 @@
 
 #include "JoystickDriver.c"
 
-const int FLAG_ARM_OUT = 85;
+const int FLAG_ARM_OUT = 10;
 const int FLAG_ARM_IN = 195;
 const int FULL_POWER_FORWARD = 100;
 const int HALF_POWER_FORWARD = 50;
@@ -107,12 +107,14 @@ void initializeRobot()
 	return;
 }
 
+int shift=0;
+
 bool flipped=false;
 
 //raise the flag asynchronously
 task raiseFlag()
 {
-	servo[FlagTwist]=FLAG_ARM_OUT;
+	servo[FlagTwist]=FLAG_ARM_OUT+shift;
 	int halt = 0;
 	int encOld = 0;
 	int encNow = 0;
@@ -125,7 +127,6 @@ task raiseFlag()
 		wait10Msec(10);
 		encOld=encNow;
 		encNow=nMotorEncoder[Flag];
-		writeDebugStreamLine("%i",abs(encNow-encOld));
 		if(abs(encNow-encOld)<LIFTER_ENCODER_THRESHOLD) //if the flag is spinning freely, it should go faster than LIFTER_ENCODER_THRESHOLD; otherwise, the flag is at the top
 		{
 			halt++;
@@ -243,11 +244,12 @@ task main()
 		if((joy2Btn(btn_LB))&&!flagLift.pressed)
 		{
 			flagLift.pressed=true;
-			if(servo[FlagTwist]!=FLAG_ARM_OUT)
+			if(servo[FlagTwist]==FLAG_ARM_IN)
 			{
 				flagLift.run=!flagLift.run;
 			}
-			servo[FlagTwist]=FLAG_ARM_OUT;
+			shift=0;
+			servo[flagTwist]=FLAG_ARM_OUT;
 			motor[Flag]=SLOW_PRIME_POWER;
 		}
 		//else if((joy2Btn(btn_START) && (servo[FlagTwist] == FLAG_ARM_OUT)))
@@ -273,13 +275,13 @@ task main()
 			flagTurn.run=!flagTurn.run;
 			if(flagTurn.run)
 			{
-				if(servo[FlagTwist]==FLAG_ARM_OUT)
+				if(servo[FlagTwist]!=FLAG_ARM_IN)
 				{
 					StartTask(raiseFlag);
 				}
 				} else {
 				StopTask(raiseFlag);
-				if(servo[FlagTwist]==FLAG_ARM_OUT)
+				if(servo[FlagTwist]!=FLAG_ARM_IN)
 				{
 					motor[Flag]=FULL_POWER_REVERSE;
 				}
@@ -314,8 +316,21 @@ task main()
 		if(joystick.joy2_TopHat==0)
 		{
 			servo[Winch]=WINCH_UP;
-		} else if (joystick.joy2_TopHat==4) {
+			} else if (joystick.joy2_TopHat==4) {
 			servo[Winch]=WINCH_DOWN;
+		}
+
+		if(joystick.joy2_TopHat==2)
+		{
+			shift++;
+			wait10Msec(3);
+			} else if (joystick.joy2_TopHat==6) {
+			shift--;
+			wait10Msec(3);
+		}
+		if(servo[FlagTwist]!=FLAG_ARM_IN)
+		{
+			servo[FlagTwist]=FLAG_ARM_OUT+shift;
 		}
 	}
 }

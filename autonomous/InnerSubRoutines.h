@@ -6,12 +6,12 @@ void primeCube();
 void crate1()
 {
 	writeDebugStreamLine("Crate 1");
-	straight(50,48); //go forward
+	straight(50,49); //go forward
 	pause();
 	turnRight(-50,2000); //turn to face bridge
 	primeCube();
 	pause();
-	straight(50,48); //go and align next to cube
+	straight(50,40); //go and align next to cube
 	pause();
 
 	dropCube();
@@ -40,7 +40,6 @@ void crate2()
 void crate3()
 {
 	writeDebugStreamLine("Crate 3");
-	writeDebugStreamLine("Crate 2");
   straight(50,48); //go forward
 	pause();
 	turnRight(-50,2000); //turn to face bridge
@@ -57,6 +56,17 @@ void crate3()
 void crate4()
 {
 	writeDebugStreamLine("Crate 4");
+  straight(50,48); //go forward
+	pause();
+	turnRight(-50,2000); //turn to face bridge
+	pause();
+	straight(50,80); //go and align next to cube
+	pause();
+	primeCube();
+	dropCube();
+	lowerCube();
+	wait10Msec(300);
+	straight(-50,39);
 }
 
 const int AUTO_LIFT_INIT=120;

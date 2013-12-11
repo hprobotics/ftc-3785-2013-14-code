@@ -74,13 +74,15 @@ task main()
   waitForStart(); // Wait for the beginning of autonomous phase.
 
   clearDebugStream();
-	zones.size=4;
-	int borders[4] = {  50, 100, 150, 200};
-	int values[4]  = {   1,   2,   3,   4};
+	zones.size=3;
+	int borders[4] = {125,  180, 215, 230};
+	int values[3]  = {        1,   2,   3};
 	zones.border=&borders;
 	zones.value=&values;
 	int position=0;
-	//position = scanIR(IRSensor, zones);
+	position = scanIR(IRSensor, zones);
+
+	turnRight(-75,1800);
 
 	switch(position)
 	{
