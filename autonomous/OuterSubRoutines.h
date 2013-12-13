@@ -29,7 +29,7 @@ void crate2()
 void crate3()
 {
 	writeDebugStreamLine("Crate 3");
-	dropAtPos(57);
+	dropAtPos(58);
 }
 
 void crate4()
@@ -60,4 +60,5 @@ void lowerCube()
 {
 		servo[AutoWrist]=AUTO_TWIST_INIT;
 		servo[AutoArm]=AUTO_LIFT_INIT;
+		wait10Msec(30);
 }

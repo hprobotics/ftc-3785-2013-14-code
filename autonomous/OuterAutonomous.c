@@ -75,7 +75,7 @@ task main()
 
   clearDebugStream();
 	zones.size=3;
-	int borders[4] = {125,  180, 215, 230};
+	int borders[4] = {125,  180, 215, 233};
 	int values[3]  = {        1,   2,   3};
 	zones.border=&borders;
 	zones.value=&values;
