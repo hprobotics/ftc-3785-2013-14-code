@@ -29,9 +29,9 @@
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "3785_motion_functions.h"	//Motion fuctions such as forwards and backwards
-#include "IRScanner.h"
+#include "IRScanner.h"//Include the Program We Created To Run The Ir Sensor
 #include "OuterSubRoutines.h"
-
+//Set The inital Positions for all of servos and variables
 const int FLAG_ARM_OUT = 85;
 const int FLAG_ARM_IN = 195;
 const int FULL_POWER_FORWARD = 100;
@@ -48,13 +48,13 @@ const int JOY_THRESHOLD = 10;
 const int WINCH_UP=134;
 const int WINCH_DOWN=217;
 
-void setIntake(int speed)
+void setIntake(int speed)//Controlls the intake speed of the Cube Grabber
 {
 	servo[Intake1]=speed;
 	servo[Intake2]=FULL_FORWARD_SERVO-speed;
 }
 
-void initializeRobot()
+void initializeRobot()//Our Starting Position
 {
 	setIntake(STOP_SERVO);
 	servo[Winch]=WINCH_UP;
@@ -65,39 +65,39 @@ void initializeRobot()
   return;
 }
 
-ZoneBoundaries zones;
+ZoneBoundaries zones;//This sets up that there are mutiple different zones that the Ir Becon can be located in.
 
 task main()
 {
-  initializeRobot();
+  initializeRobot();//Initalize the robot
 
   waitForStart(); // Wait for the beginning of autonomous phase.
 
-  clearDebugStream();
-	zones.size=3;
-	int borders[4] = {125,  180, 215, 230};
-	int values[3]  = {        1,   2,   3};
+  clearDebugStream();//Used for testing
+	zones.size=3;//how many different zones we scan for
+	int borders[4] = {125,  180, 215, 230};//the positions that the rotating servo scans
+	int values[3]  = {        1,   2,   3};//what crate it needs to go to.
 	zones.border=&borders;
 	zones.value=&values;
 	int position=0;
-	position = scanIR(IRSensor, zones);
+	position = scanIR(IRSensor, zones);//reads the position that the ir sensor reads.
 
-	switch(position)
+	switch(position)//depending on what the servo reads, do different tasks. The Routines are in a Different Program.
 	{
-		case 0:
-		crate4();
+		case 0: //if zone 0
+		crate4();//do crate 4
 		break;
-		case 1:
-		crate1();
+		case 1://if zone 1
+		crate1();//do crate 1
 		break;
-		case 2:
-		crate2();
+		case 2://if zone 2
+		crate2();//do crate 2
 		break;
-	  case 3:
-	  crate3();
+	  case 3://if zone 3
+	  crate3();//do crate 3
 		break;
-		case 4:
-		crate4();
+		case 4://if zone 4
+		crate4();//do crate y
 		break;
 	}
 }
