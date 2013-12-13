@@ -59,7 +59,7 @@ void initializeRobot()//Our Starting Position
 	setIntake(STOP_SERVO);
 	servo[Winch]=WINCH_UP;
 	servo[FlagTwist]=FLAG_ARM_IN;
-	servo[IRServo]=255;
+	servo[IRServo]=128;
 	servo[AutoArm]=AUTO_LIFT_INIT;
 	servo[AutoWrist]=AUTO_TWIST_INIT;
   return;
