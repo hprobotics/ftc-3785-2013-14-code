@@ -80,7 +80,6 @@ typedef enum
 	btn_START=10
 } joybtn;
 
-bool slow=false;
 
 
 void setArm(int speed)
@@ -144,6 +143,9 @@ task main()
 	servobuttons intake;
 	servobuttons flagTurn;
 	servobuttons flagLift;
+	servobuttons armUp;
+	servobuttons slow;
+	slow.run=false;
 	initializeRobot();
 	waitForStart();   // wait for start of tele-op phase
 	intake.run=true;
@@ -159,7 +161,7 @@ task main()
 			mult = 1;
 		}
 
-		if(!slow)
+		if(!slow.run)
 		{
 			if (abs(leftjoy)>JOY_THRESHOLD)
 			{
@@ -187,8 +189,8 @@ task main()
 		{
 			if (abs(leftjoy)>JOY_THRESHOLD)
 			{
-				motor[RightFront]=-leftjoy;
-				motor[RightBack]=-leftjoy;
+				motor[RightFront]=-leftjoy*mult;
+				motor[RightBack]=-leftjoy*mult;
 			}
 			else
 			{
@@ -197,8 +199,8 @@ task main()
 			}
 			if (abs(rightjoy)>JOY_THRESHOLD)
 			{
-				motor[LeftFront]=-rightjoy;
-				motor[LeftBack]=-rightjoy;
+				motor[LeftFront]=-rightjoy*mult;
+				motor[LeftBack]=-rightjoy*mult;
 			}
 			else
 			{
@@ -216,6 +218,16 @@ task main()
 			motor[CubeLift]=NO_POWER;
 		}
 
+		if((joy1Btn(btn_Y))&&!slow.pressed)
+		{
+			slow.pressed=true;
+			slow.run=!slow.run;
+		}
+		if(!(joy1Btn(btn_Y)))
+		{
+			slow.pressed=false;
+		}
+
 		if((joy2Btn(1))&&!intake.pressed)
 		{
 			intake.pressed=true;
@@ -224,6 +236,16 @@ task main()
 		if(!(joy2Btn(1)))
 		{
 			intake.pressed=false;
+		}
+
+		if((joy2Btn(btn_RB))&&!armUp.pressed)
+		{
+			armUp.pressed=true;
+			armUp.run=!armUp.run;
+		}
+		if(!(joy2Btn(btn_RB)))
+		{
+			armUp.pressed=false;
 		}
 
 
@@ -301,14 +323,14 @@ task main()
 			motor[Flag]=NO_POWER;
 		}
 
-		if(joy1Btn(btn_RB)){
-			setArm(FULL_POWER_FORWARD);
+		if(joy2Btn(btn_RT)){
+			armUp.run=false;
+			setArm(FULL_POWER_REVERSE);
 			} else if (joy1Btn(btn_RT)) {
+			armUp.run=false;
 			setArm(FULL_POWER_REVERSE);
-			} else if(joy2Btn(btn_RB)){
+			} else if(armUp.run){
 			setArm(FULL_POWER_FORWARD);
-			} else if (joy2Btn(btn_RT)) {
-			setArm(FULL_POWER_REVERSE);
 			} else {
 			setArm(NO_POWER);
 		}
