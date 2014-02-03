@@ -22,11 +22,11 @@ void crate1()
 void crate2()
 {
 	writeDebugStreamLine("Crate 2");
-  straight(75,48); //go forward
+  straight(75,49); //go forward
 	pause();
 	turnRight(-50,2200); //turn to face bridge
 	pause();
-		primeCube();
+	primeCube();
 	straight(75,54); //go and align next to cube
 	pause();
 

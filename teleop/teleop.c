@@ -45,7 +45,7 @@ const int SLOW_PRIME_POWER = 10;
 const int LIFTER_ENCODER_THRESHOLD = 100;
 const int JOY_THRESHOLD = 10;
 const int WINCH_UP=134;
-const int WINCH_DOWN=217;
+const int WINCH_DOWN=225;
 
 int sign(int num)
 {

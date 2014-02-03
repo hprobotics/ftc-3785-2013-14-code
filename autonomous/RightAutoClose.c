@@ -1,5 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S2, HTMotor,  HTServo,  HTServo,  none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S2,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     MUX,            sensorI2CCustomFastSkipStates)
 #pragma config(Sensor, S4,     IRSensor,       sensorI2CCustomFastSkipStates9V)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, reversed, encoder)
@@ -30,7 +32,7 @@
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "3785_motion_functions.h"	//Motion fuctions such as forwards and backwards
 #include "IRScanner.h"
-#include "OuterSubRoutines.h"
+#include "InnerSubRoutines.h"
 
 const int FLAG_ARM_OUT = 85;
 const int FLAG_ARM_IN = 195;
@@ -73,32 +75,19 @@ task main()
 
   waitForStart(); // Wait for the beginning of autonomous phase.
 
-  clearDebugStream();
-	zones.size=3;
-	int borders[4] = {125,  180, 215, 233};
-	int values[3]  = {        1,   2,   3};
-	zones.border=&borders;
-	zones.value=&values;
-	int position=0;
-	position = scanIR(IRSensor, zones);
+  writeDebugStreamLine("Crate 1");
+	straight(-75,53); //go forward
+	pause();
+	turnRight(50,2200); //turn to face bridge
+	primeCube();
+	pause();
+	straight(-75,34); //go and align next to cube
+	pause();
 
-	switch(position)
-	{
-		case 0:
-		crate1();
-		break;
-		case 1:
-		crate1();
-		break;
-		case 2:
-		crate2();
-		break;
-	  case 3:
-	  crate1();
-		break;
-		case 4:
-		crate1();
-		break;
-	}
-	while(true);
+	dropCube();
+	lowerCube();
+	pause();
+
+
+
 }
