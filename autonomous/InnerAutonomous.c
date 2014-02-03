@@ -84,8 +84,6 @@ task main()
 	int position=0;
 	position = scanIR(IRSensor, zones);
 
-	turnRight(-75,1800);
-
 	switch(position)
 	{
 		case 0:

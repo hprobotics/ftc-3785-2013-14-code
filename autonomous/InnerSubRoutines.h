@@ -1,6 +1,7 @@
 void leftInnerCrate1()
 {
 	writeDebugStreamLine("Crate 1");
+	turnRight(-75,1800);
 	straight(75,49); //go forward
 	pause();
 	turnRight(-50,2200); //turn to face bridge
@@ -17,6 +18,7 @@ void leftInnerCrate1()
 void leftInnerCrate2()
 {
 	writeDebugStreamLine("Crate 2");
+	turnRight(-75,1800);
   straight(75,48); //go forward
 	pause();
 	turnRight(-50,2200); //turn to face bridge
@@ -34,6 +36,7 @@ void leftInnerCrate2()
 void leftInnerCrate3()
 {
 	writeDebugStreamLine("Crate 3");
+	turnRight(-75,1800);
   straight(75,48); //go forward
 	pause();
 	turnRight(-50,2200); //turn to face bridge
@@ -50,6 +53,7 @@ void leftInnerCrate3()
 void leftInnerCrate4()
 {
 	writeDebugStreamLine("Crate 4");
+	turnRight(-75,1800);
   straight(75,48); //go forward
 	pause();
 	turnRight(-50,2200); //turn to face bridge
@@ -65,6 +69,7 @@ void leftInnerCrate4()
 void rightInnerCrate1()
 {
 	writeDebugStreamLine("Crate 1");
+	turnRight(75,1800);
 	straight(-75,49); //go forward
 	pause();
 	turnRight(50,2200); //turn to face bridge
@@ -81,6 +86,7 @@ void rightInnerCrate1()
 void rightInnerCrate2()
 {
 	writeDebugStreamLine("Crate 2");
+	turnRight(75,1800);
   straight(-75,48); //go forward
 	pause();
 	turnRight(50,2200); //turn to face bridge
@@ -98,6 +104,7 @@ void rightInnerCrate2()
 void rightInnerCrate3()
 {
 	writeDebugStreamLine("Crate 3");
+	turnRight(75,1800);
   straight(-75,48); //go forward
 	pause();
 	turnRight(50,2200); //turn to face bridge
@@ -114,6 +121,7 @@ void rightInnerCrate3()
 void rightInnerCrate4()
 {
 	writeDebugStreamLine("Crate 4");
+	turnRight(75,1800);
   straight(-75,48); //go forward
 	pause();
 	turnRight(50,2200); //turn to face bridge
