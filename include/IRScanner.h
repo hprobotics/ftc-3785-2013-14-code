@@ -8,14 +8,14 @@ typedef struct{
  int size;
 } ZoneBoundaries;
 
-int scanIR(tSensors ir, ZoneBoundaries bounds)
+int scanIR(tSensors ir, TServoIndex irServo, ZoneBoundaries bounds)
 {
 	int acS1,acS2,acS3,acS4,acS5;
 	int maxpos=0;
 	int maxval=0;
 	for(int i=bounds.border[0]; i<=255; i+=3)
 	{
-		servo[IRServo]=i;
+		servo[irServo]=i;
 		wait10Msec(3);
 		HTIRS2readAllACStrength(ir,acS1,acS2,acS3,acS4,acS5);
 		if(acS3>maxval)

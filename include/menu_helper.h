@@ -75,7 +75,7 @@ task runMenu()
 
       nxtDisplayTextLine(6, "NXT Batt:%4.1f V", nAvgBatteryLevel / (float) 1000);   // Display NXT Battery Voltage
 
-	nxtDisplayTextLine(7,"%s,%s,%s,%i",right?"R":"L",inner?"In":"Out",closeGoal?"Close":"All",delay);
+	nxtDisplayTextLine(7,"%s,%s,%s,%i",right?"R":"L",inner?"In":"Out",closeGoal?"Close":"Any",delay);
 		if(nNxtButtonPressed==NEXT_BTN||nNxtButtonPressed==PREV_BTN){
 			if(currType=='b')
 			{
