@@ -49,7 +49,6 @@ void setIntake(int speed)
 
 void initializeRobot()
 {
-	configZones();
 	setIntake(STOP_SERVO);
 	servo[Winch]=WINCH_UP;
 	servo[FlagTwist]=FLAG_ARM_IN;
@@ -65,20 +64,29 @@ task main()
 	initializeRobot();
 
 	bDisplayDiagnostics = false;
+	writeDebugStreamLine("%i",lZones.border[0]);
 	StartTask(runMenu);
 
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	StopTask(runMenu);
+	eraseDisplay();
 	bDisplayDiagnostics = true;
 
 	wait1Msec(delay*1000);
 
 	int position = 0;
-	ZoneBoundaries zones;
-zones = right?rZones:lZones;
-position = scanIR(right?RightIRSensor:LeftIRSensor,right?RightIRServo:RightIRSensor, zones);
+		configZones();
+	ZoneBoundaries* zones;
+	if(right){
+		zones = &rZones;
+	} else {
+		zones = &lZones;
+	}
 
+
+	position = scanIR(right?RightIRSensor:LeftIRSensor,right?RightIRServo:LeftIRServo, *zones);
+writeDebugStreamLine("pos2: %i",position);
 	switch(position){
 	case 0:
 		if(right){

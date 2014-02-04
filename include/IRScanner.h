@@ -3,8 +3,8 @@
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(maxpos))
 
 typedef struct{
- int *border;
- int *value;
+ int* border;
+ int* value;
  int size;
 } ZoneBoundaries;
 
@@ -13,7 +13,7 @@ int scanIR(tSensors ir, TServoIndex irServo, ZoneBoundaries bounds)
 	int acS1,acS2,acS3,acS4,acS5;
 	int maxpos=0;
 	int maxval=0;
-	for(int i=bounds.border[0]; i<=255; i+=3)
+	for(int i=bounds.border[0]; i<=bounds.border[4]; i+=3)
 	{
 		servo[irServo]=i;
 		wait10Msec(3);
