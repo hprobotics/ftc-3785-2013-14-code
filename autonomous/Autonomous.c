@@ -101,7 +101,7 @@ writeDebugStreamLine("pos2: %i",position);
 			}
 			} else {
 			if(inner && !closeGoal){
-				leftInnerCrate4()
+				leftInnerCrate4();
 				} else if (!closeGoal) {
 				leftOuterCrate4();
 				} else if (inner && closeGoal) {
