@@ -93,7 +93,7 @@ position = scanIR(right?RightIRSensor:LeftIRSensor,right?RightIRServo:RightIRSen
 			}
 			} else {
 			if(inner && !closeGoal){
-				leftInnerCrate4()
+				leftInnerCrate4();
 				} else if (!closeGoal) {
 				leftOuterCrate4();
 				} else if (inner && closeGoal) {
