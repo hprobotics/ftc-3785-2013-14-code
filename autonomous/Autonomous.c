@@ -53,7 +53,7 @@ void initializeRobot()
 	servo[Winch]=WINCH_UP;
 	servo[FlagTwist]=FLAG_ARM_IN;
 	servo[LeftIRServo]=128;
-	servo[RightIRServo]=128;
+	servo[RightIRServo]=0;
 	servo[AutoArm]=AUTO_LIFT_INIT;
 	servo[AutoWrist]=AUTO_TWIST_INIT;
 	return;
@@ -84,9 +84,9 @@ task main()
 		zones = &lZones;
 	}
 
-
 	position = scanIR(right?RightIRSensor:LeftIRSensor,right?RightIRServo:LeftIRServo, *zones);
 writeDebugStreamLine("pos2: %i",position);
+
 	switch(position){
 	case 0:
 		if(right){
@@ -95,7 +95,7 @@ writeDebugStreamLine("pos2: %i",position);
 				} else if (!closeGoal) {
 				rightOuterCrate1();
 				} else if (inner && closeGoal) {
-				rightOuterCrate4();
+				rightInnerCrate4();
 				} else {
 				rightOuterCrate4();
 			}
@@ -105,7 +105,7 @@ writeDebugStreamLine("pos2: %i",position);
 				} else if (!closeGoal) {
 				leftOuterCrate4();
 				} else if (inner && closeGoal) {
-				leftOuterCrate1();
+				leftInnerCrate1();
 				} else {
 				leftOuterCrate1();
 			}
@@ -118,7 +118,7 @@ writeDebugStreamLine("pos2: %i",position);
 				} else if (!closeGoal) {
 				rightOuterCrate1();
 				} else if (inner && closeGoal) {
-				rightOuterCrate4();
+				rightInnerCrate4();
 				} else {
 				rightOuterCrate4();
 			}
@@ -137,7 +137,7 @@ writeDebugStreamLine("pos2: %i",position);
 				} else if (!closeGoal) {
 				rightOuterCrate2();
 				} else if (inner && closeGoal) {
-				rightOuterCrate4();
+				rightInnerCrate4();
 				} else {
 				rightOuterCrate4();
 			}
@@ -148,6 +148,7 @@ writeDebugStreamLine("pos2: %i",position);
 				leftOuterCrate2();
 			}
 		}
+		break;
 	case 3:
 		if(right){
 			if(inner) {
@@ -161,7 +162,7 @@ writeDebugStreamLine("pos2: %i",position);
 				} else if (!closeGoal) {
 				leftOuterCrate3();
 				} else if (inner && closeGoal) {
-				leftOuterCrate1();
+				leftInnerCrate1();
 				} else {
 				leftOuterCrate1();
 			}
@@ -180,11 +181,12 @@ writeDebugStreamLine("pos2: %i",position);
 				} else if (!closeGoal) {
 				leftOuterCrate4();
 				} else if (inner && closeGoal) {
-				leftOuterCrate1();
+				leftInnerCrate1();
 				} else {
 				leftOuterCrate1();
 			}
 		}
 		break;
 	}
+	while(true);
 }

@@ -42,7 +42,7 @@ void rightDropAtPos(int distance)//The position in which to drop the cube
 	dropCube();
 	lowerCube();
 	straight(-75,distance);//drive forwards at 75% power the same distance it went backwards.
-	turnRight(75,1750);//turn right 90 degrees
+	turnRight(75,1650);//turn right 90 degrees
 	straight(-75,46);//go straight
 	turnRight(75,1300);//turn on the ramp
 	straight(-75,52);//go onto the ramp
@@ -51,23 +51,23 @@ void rightDropAtPos(int distance)//The position in which to drop the cube
 void rightOuterCrate1()
 {
 	writeDebugStreamLine("Crate 1");
-	rightDropAtPos(12);//the position used for the first crate
+	rightDropAtPos(84);//the position used for the first crate
 }
 
 void rightOuterCrate2()
 {
 	writeDebugStreamLine("Crate 2");
-  rightDropAtPos(24);//the position used for the second crate
+  rightDropAtPos(74);//the position used for the second crate
 }
 
 void rightOuterCrate3()
 {
 	writeDebugStreamLine("Crate 3");
-	rightDropAtPos(58);//the position used for the third crate
+	rightDropAtPos(40);//the position used for the third crate
 }
 
 void rightOuterCrate4()
 {
 	writeDebugStreamLine("Crate 4");
-	rightDropAtPos(67); //the position used for the fourth crate
+	rightDropAtPos(28); //the position used for the fourth crate
 }

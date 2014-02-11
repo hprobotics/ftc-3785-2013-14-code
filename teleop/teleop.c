@@ -23,7 +23,7 @@
 #pragma config(Servo,  srvo_S2_C2_6,    FlagTwist,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_1,    Winch,                tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_2,    IRServo,              tServoStandard)
-#pragma config(Servo,  srvo_S2_C3_3,    servo9,               tServoNone)
+#pragma config(Servo,  srvo_S2_C3_3,    RightIRServo,         tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_4,    servo10,              tServoNone)
 #pragma config(Servo,  srvo_S2_C3_5,    servo11,              tServoNone)
 #pragma config(Servo,  srvo_S2_C3_6,    servo12,              tServoNone)
@@ -101,6 +101,7 @@ void initializeRobot()
 	servo[Winch]=WINCH_UP;
 	servo[FlagTwist]=FLAG_ARM_IN;
 	servo[IRServo]=255;
+	servo[RightIRServo]=0;
 	servo[AutoArm]=128;
 	servo[AutoWrist]=128;
 	return;
