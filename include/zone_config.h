@@ -6,7 +6,7 @@ ZoneBoundaries rZones;
 
 
 	int rBorders[6] = {0,   42, 65, 76, 128, 128};
-	int rValues[4]  = {        1,  2,  3,  4};
+	int rValues[4]  = {      1,  2,  3,  4};
 
 void configZones()
 {

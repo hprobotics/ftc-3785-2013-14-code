@@ -9,7 +9,6 @@ void leftInnerCrate1()
 	pause();
 	straight(75,45); //go and align next to cube
 	pause();
-
 	dropCube();
 	lowerCube();
 	pause();
@@ -90,13 +89,12 @@ void rightInnerCrate2()
 	pause();
 	turnRight(50,2200); //turn to face bridge
 	pause();
-		primeCube();
 	straight(-75,54); //go and align next to cube
 	pause();
-
+	primeCube();
 	dropCube();
-	straight(75,20);
 	lowerCube();
+	straight(75,20);
 	wait10Msec(300);
 }
 

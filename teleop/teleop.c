@@ -9,8 +9,8 @@
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     RightBack,     tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     LeftBack,      tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     Arm1,          tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     Arm2,          tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     Arm1,          tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     Arm2,          tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     CubeLift,      tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     Flag,          tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S2_C1_1,     RightFront,    tmotorTetrix, PIDControl, reversed, encoder)
@@ -42,7 +42,7 @@ const int FULL_FORWARD_SERVO = 255;
 const int FULL_REVERSE_SERVO = 0;
 const int STOP_SERVO=128;
 const int SLOW_PRIME_POWER = 10;
-const int LIFTER_ENCODER_THRESHOLD = 100;
+const int LIFTER_ENCODER_THRESHOLD = 50;
 const int JOY_THRESHOLD = 10;
 const int WINCH_UP=134;
 const int WINCH_DOWN=225;
@@ -124,7 +124,7 @@ task raiseFlag()
 	while(halt<10)
 	{
 		motor[Flag]=FULL_POWER_FORWARD;
-		wait10Msec(10);
+		wait10Msec(5);
 		encOld=encNow;
 		encNow=nMotorEncoder[Flag];
 		if(abs(encNow-encOld)<LIFTER_ENCODER_THRESHOLD) //if the flag is spinning freely, it should go faster than LIFTER_ENCODER_THRESHOLD; otherwise, the flag is at the top
@@ -338,7 +338,7 @@ task main()
 
 		if(joystick.joy2_TopHat==0)
 		{
-			servo[Winch]=WINCH_UP;
+			servo[Winch]=WINCH_UP+15;
 			} else if (joystick.joy2_TopHat==4) {
 			servo[Winch]=WINCH_DOWN;
 		}
