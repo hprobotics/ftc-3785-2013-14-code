@@ -37,7 +37,7 @@ void leftDropAtPos(int idx)//The position in which to drop the cube
 				idx--;
 				counter++;
 				encoder=inchesToEncoder(leftTargets[idx]);
-			} else if(pos>7&&idx<(closeGoal?1:3)&&counter<3) {
+			} else if(pos>7&&idx<(closeGoal?1:3)&&counter<3&&(closeGoal?position<3:true)) {
 				idx++;
 				counter++;
 				encoder=inchesToEncoder(leftTargets[idx]);
