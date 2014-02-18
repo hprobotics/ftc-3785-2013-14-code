@@ -59,6 +59,8 @@ void initializeRobot()
 	return;
 }
 
+int position = 0;
+
 task main()
 {
 	initializeRobot();
@@ -75,7 +77,7 @@ task main()
 
 	wait1Msec(delay*1000);
 
-	int position = 0;
+
 		configZones();
 	ZoneBoundaries* zones;
 	if(right){

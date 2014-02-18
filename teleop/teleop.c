@@ -127,7 +127,9 @@ task raiseFlag()
 		wait10Msec(5);
 		encOld=encNow;
 		encNow=nMotorEncoder[Flag];
-		if(abs(encNow-encOld)<LIFTER_ENCODER_THRESHOLD) //if the flag is spinning freely, it should go faster than LIFTER_ENCODER_THRESHOLD; otherwise, the flag is at the top
+		//if the flag is spinning freely, it should go faster than LIFTER_ENCODER_THRESHOLD;
+		//otherwise, the flag is at the top
+		if(abs(encNow-encOld)<LIFTER_ENCODER_THRESHOLD)
 		{
 			halt++;
 		}

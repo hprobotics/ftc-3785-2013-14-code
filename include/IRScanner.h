@@ -27,7 +27,7 @@ int scanIR(tSensors ir, TServoIndex irServo, ZoneBoundaries bounds)
 	writeDebugStreamLine("pos: %i",maxpos);
 	if(maxpos<=bounds.border[0])
 	{
-		return bounds.size+1;
+		return 0;
 	}
 
 	for(int i=0; i<bounds.size; i++ )
