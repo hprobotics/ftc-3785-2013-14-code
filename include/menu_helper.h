@@ -20,8 +20,8 @@ void switchInt(int *ptr, TButtons btn)
 	}
 }
 
-bool right=true;
-bool inner=true;
+bool right=false;
+bool inner=false;
 bool closeGoal=false;
 int delay=0;
 

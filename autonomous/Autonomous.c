@@ -31,6 +31,8 @@
 #include "fakeJoystickDriver.c"
 #endif
 
+int position = 0;
+
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "3785_constants.h"
 #include "3785_motion_functions.h"	//Motion fuctions such as forwards and backwards
@@ -59,8 +61,6 @@ void initializeRobot()
 	return;
 }
 
-int position = 0;
-
 task main()
 {
 	initializeRobot();
@@ -86,8 +86,8 @@ task main()
 		zones = &lZones;
 	}
 
-	position = scanIR(right?RightIRSensor:LeftIRSensor,right?RightIRServo:LeftIRServo, *zones);
-writeDebugStreamLine("pos2: %i",position);
+	position = inner?scanIR(right?RightIRSensor:LeftIRSensor,right?RightIRServo:LeftIRServo, *zones):(right?4:1);
+	writeDebugStreamLine("pos2: %i",position);
 
 	switch(position){
 	case 0:

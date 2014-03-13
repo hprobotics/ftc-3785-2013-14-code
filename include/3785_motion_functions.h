@@ -2,7 +2,7 @@
 
 const int ENCODER_RESOLUTION=1440;
 const int WHEEL_SIZE=4;	//Diameter of Wheel
-const int RATIO=3/2;		//wheel/gear
+const int RATIO=2.25;		//wheel/gear
 
 bool distanceNotTraveled(int encoderTicks)
 {

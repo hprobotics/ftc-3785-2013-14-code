@@ -74,6 +74,9 @@ void turnLeft(int power, int encoder)
 
 	initalizeEncoders();
 
+	encoder = encoder * 2 /3;
+	encoder = encoder * RATIO;
+
 	while (distanceNotTraveled(encoder))
 	{
 		if(abs(currentPower) < abs(power))
@@ -98,6 +101,8 @@ void turnLeft(int power, int encoder)
 void turnRight(int power, int encoder)
 {
 	int currentPower = 0;
+
+	encoder = encoder * 2 /3;
 
 	initalizeEncoders();
 	while (distanceNotTraveled(encoder))
