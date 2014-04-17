@@ -22,7 +22,7 @@ void switchInt(int *ptr, TButtons btn)
 
 bool right=false;
 bool inner=false;
-bool closeGoal=false;
+int closeGoal=4;
 int delay=0;
 
 task runMenu()
@@ -36,13 +36,19 @@ task runMenu()
 	while(true){
 		if(delay<0){
 			delay=0;
-			} else if(delay>10){
-			delay = 10;
+			} else if(delay>15){
+			delay = 15;
+		}
+
+		if(closeGoal<1){
+			closeGoal=1;
+			} else if(delay>4){
+			closeGoal = 4;
 		}
 
 	nxtDisplayString(0,"Side:    %s",right?"right":"left ");
 	nxtDisplayString(1,"Variant: %s",inner?"inner":"outer");
-	nxtDisplayString(2,"Close:   %s",closeGoal?"yes":"no ");
+	nxtDisplayString(2,"Close:   %i",closeGoal);
 		nxtDisplayString(3,"Delay:   %2i",delay);
 
 		if(currVar == &right)
@@ -75,7 +81,7 @@ task runMenu()
 
       nxtDisplayTextLine(6, "NXT Batt:%4.1f V", nAvgBatteryLevel / (float) 1000);   // Display NXT Battery Voltage
 
-	nxtDisplayTextLine(7,"%s,%s,%s,%i",right?"R":"L",inner?"In":"Out",closeGoal?"Close":"Any",delay);
+	nxtDisplayTextLine(7,"%s,%s,%i,%i",right?"R":"L",inner?"In":"Out",closeGoal,delay);
 		if(nNxtButtonPressed==NEXT_BTN||nNxtButtonPressed==PREV_BTN){
 			if(currType=='b')
 			{
@@ -94,7 +100,7 @@ task runMenu()
 				currType = 'b';
 				} else if(currVar == &inner){
 				currVar = &closeGoal;
-				currType = 'b';
+				currType = 'i';
 				} else if(currVar == &closeGoal) {
 				currVar = &delay;
 				currType = 'i';
@@ -112,5 +118,5 @@ task runMenu()
 
 void displayAutoType()
 {
-	nxtDisplayTextLine(7,"%s,%s,%s,%i",right?"R":"L",inner?"In":"Out",closeGoal?"Close":"All",delay);
+	nxtDisplayTextLine(7,"%s,%s,%i,%i",right?"R":"L",inner?"In":"Out",closeGoal,delay);
 }

@@ -31,6 +31,8 @@
 #include "fakeJoystickDriver.c"
 #endif
 
+#define three
+
 int position = 0;
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
@@ -68,7 +70,7 @@ task main()
 	initializeRobot();
 
 	bDisplayDiagnostics = false;
-	writeDebugStreamLine("When: %i",nSysTime);
+	writeDebugStreamLine("%i",lZones.border[0]);
 	StartTask(runMenu);
 
 	waitForStart(); // Wait for the beginning of autonomous phase.

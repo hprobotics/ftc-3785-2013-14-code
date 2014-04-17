@@ -6,7 +6,7 @@
 #pragma config(Sensor, S4,     ProtoBoard,     sensorI2CCustomFastSkipStates9V)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop, reversed, encoder)
-#pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, reversed, encoder)
+#pragma config(Motor,  motorC,          PullMotor,     tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     RightBack,     tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     LeftBack,      tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     Arm1,          tmotorTetrix, PIDControl, encoder)
@@ -15,13 +15,13 @@
 #pragma config(Motor,  mtr_S1_C3_2,     Flag,          tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S2_C1_1,     RightFront,    tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S2_C1_2,     LeftFront,     tmotorTetrix, PIDControl, encoder)
-#pragma config(Servo,  srvo_S2_C2_1,    Intake1,              tServoContinuousRotation)
-#pragma config(Servo,  srvo_S2_C2_2,    Intake2,              tServoContinuousRotation)
+#pragma config(Servo,  srvo_S2_C2_1,    Clamp1,               tServoContinuousRotation)
+#pragma config(Servo,  srvo_S2_C2_2,    Clamp2,               tServoContinuousRotation)
 #pragma config(Servo,  srvo_S2_C2_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S2_C2_4,    AutoArm,              tServoStandard)
 #pragma config(Servo,  srvo_S2_C2_5,    AutoWrist,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C2_6,    FlagTwist,            tServoStandard)
-#pragma config(Servo,  srvo_S2_C3_1,    Winch,                tServoStandard)
+#pragma config(Servo,  srvo_S2_C3_1,    Drop,                 tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_2,    IRServo,              tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_3,    RightIRServo,         tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_4,    servo10,              tServoNone)
@@ -31,7 +31,7 @@
 
 #include "JoystickDriver.c"
 
-const int FLAG_ARM_OUT = 10;
+const int FLAG_ARM_OUT = 50;
 const int FLAG_ARM_IN = 195;
 const int FULL_POWER_FORWARD = 100;
 const int HALF_POWER_FORWARD = 50;
@@ -44,17 +44,21 @@ const int STOP_SERVO=128;
 const int SLOW_PRIME_POWER = 10;
 const int LIFTER_ENCODER_THRESHOLD = 50;
 const int JOY_THRESHOLD = 10;
-const int WINCH_UP=134;
-const int WINCH_DOWN=225;
+const int SCOOP_UP=20;
+const int SCOOP_DOWN=160;
+const int SCOOP_LEVEL=120;
+const int CLAMP_OPEN=180;
+const int CLAMP_DOWN=100;
+const int CLAMP_FLUSH=0;
 
-const int ALIGN_1_OUT=190;
-const int ALIGN_2_OUT=65;
+const int ALIGN_1_OUT=212;
+const int ALIGN_2_OUT=48;
 
-const int ALIGN_1_IN=35;
-const int ALIGN_2_IN=205;
+const int ALIGN_1_IN=58;
+const int ALIGN_2_IN=178;
 
-const int ALIGN_1_GRIP=145;
-const int ALIGN_2_GRIP=118;
+const int ALIGN_1_GRIP=167;
+const int ALIGN_2_GRIP=96;
 
 int sign(int num)
 {
@@ -68,6 +72,8 @@ int sign(int num)
 
 #define leftjoy joystick.joy1_y1*joystick.joy1_y1*100.0/(128.0*128.0)*sign(joystick.joy1_y1)
 #define rightjoy joystick.joy1_y2*joystick.joy1_y2*100.0/(128.0*128.0)*sign(joystick.joy1_y2)
+#define leftjoy2 joystick.joy2_y1*joystick.joy2_y1*100.0/(128.0*128.0)*sign(joystick.joy2_y1)
+#define rightjoy2 joystick.joy2_y2*joystick.joy2_y2*100.0/(128.0*128.0)*sign(joystick.joy2_y2)
 
 typedef struct
 {
@@ -97,21 +103,22 @@ void setArm(int speed)
 	motor[Arm2]=speed;
 }
 
-void setIntake(int speed)
+void setClamp(int speed)
 {
-	servo[Intake1]=speed;
-	servo[Intake2]=FULL_FORWARD_SERVO-speed;
+	servo[Clamp1]=speed;
+	servo[Clamp2]=FULL_FORWARD_SERVO-speed;
 }
 
 
 void initializeRobot()
 {
-	setIntake(STOP_SERVO);
-	servo[Winch]=WINCH_UP;
+	servoChangeRate[Drop]=8;
+	setClamp(CLAMP_FLUSH);
+	servo[Drop]=SCOOP_UP;
 	servo[FlagTwist]=FLAG_ARM_IN;
 	servo[AlignServo1]=ALIGN_1_IN;
 	servo[AlignServo2]=ALIGN_2_IN;
-	servo[IRServo]=255;
+	servo[IRServo]=128;
 	servo[RightIRServo]=0;
 	servo[AutoArm]=128;
 	servo[AutoWrist]=128;
@@ -120,7 +127,6 @@ void initializeRobot()
 
 int shift=0;
 
-bool flipped=false;
 
 //raise the flag asynchronously
 task raiseFlag()
@@ -153,8 +159,8 @@ task raiseFlag()
 
 task closeGrip() {
 	servo[AlignServo1]=ALIGN_1_IN;
-	servo[AlignServo2]=ALIGN_2_OUT;
-	wait10Msec(25);
+	servo[AlignServo2]=0;
+	wait10Msec(35);
 	servo[AlignServo2]=ALIGN_2_IN;
 }
 
@@ -166,12 +172,21 @@ task openGrip() {
 		servo[AlignServo2]=ALIGN_2_GRIP;
 		} else {
 		out = false;
-		servo[AlignServo2]=ALIGN_2_OUT;
+		servo[AlignServo2]=0;
 		wait10Msec(15);
 		servo[AlignServo1]=ALIGN_1_OUT;
 		wait10Msec(50);
+		servo[AlignServo2]=ALIGN_2_OUT;
 		out = true;
 	}
+}
+
+task fixStuff() {
+	servo[AlignServo1]=ALIGN_1_GRIP+30;
+	servo[AlignServo2]=ALIGN_2_GRIP+30;
+	wait10Msec(40);
+	servo[AlignServo1]=ALIGN_1_GRIP;
+	servo[AlignServo2]=ALIGN_2_GRIP;
 }
 
 task main()
@@ -225,8 +240,8 @@ task main()
 		{
 			if (abs(leftjoy)>JOY_THRESHOLD)
 			{
-				motor[RightFront]=-leftjoy*mult;
-				motor[RightBack]=-leftjoy*mult;
+				motor[RightFront]=-leftjoy*mult*.75;
+				motor[RightBack]=-leftjoy*mult*.75;
 			}
 			else
 			{
@@ -235,8 +250,8 @@ task main()
 			}
 			if (abs(rightjoy)>JOY_THRESHOLD)
 			{
-				motor[LeftFront]=-rightjoy*mult;
-				motor[LeftBack]=-rightjoy*mult;
+				motor[LeftFront]=-rightjoy*mult*.75;
+				motor[LeftBack]=-rightjoy*mult*.75;
 			}
 			else
 			{
@@ -264,29 +279,7 @@ task main()
 			slow.pressed=false;
 		}
 
-		if((joy2Btn(1))&&!intake.pressed)
-		{
-			intake.pressed=true;
-			intake.run=!intake.run;
-		}
-		if(!(joy2Btn(1)))
-		{
-			intake.pressed=false;
-		}
 
-		if (!intake.run)
-		{
-			setIntake(STOP_SERVO);
-		}
-		else if (intake.run)
-		{
-			if(joy2Btn(3))
-			{
-				setIntake(FULL_REVERSE_SERVO);
-				} else {
-				setIntake(FULL_FORWARD_SERVO);
-			}
-		}
 		//open the flag raiser and spin it slowly for alignment
 		if((joy2Btn(btn_LB))&&!flagLift.pressed)
 		{
@@ -296,7 +289,7 @@ task main()
 				flagLift.run=!flagLift.run;
 			}
 			shift=0;
-			servo[flagTwist]=FLAG_ARM_OUT;
+			servo[FlagTwist]=FLAG_ARM_OUT;
 			motor[Flag]=SLOW_PRIME_POWER;
 		}
 		//else if((joy2Btn(btn_START) && (servo[FlagTwist] == FLAG_ARM_OUT)))
@@ -361,11 +354,33 @@ task main()
 			setArm(NO_POWER);
 		}
 
-		if(joystick.joy2_TopHat==0)
+		if(abs(leftjoy2)>JOY_THRESHOLD){
+			motor[PullMotor]=leftjoy2;
+			} else {
+			motor[PullMotor]=NO_POWER;
+		}
+
+		if(joystick.joy1_TopHat==0)
 		{
-			servo[Winch]=WINCH_UP+15;
+			servo[Drop]=SCOOP_UP;
+			setClamp(CLAMP_DOWN);
+			} else if (joystick.joy1_TopHat==4) {
+			servo[Drop]=SCOOP_DOWN;
+			} else if (joystick.joy1_TopHat==2 || joystick.joy1_TopHat==6) {
+			servo[Drop]=SCOOP_LEVEL;
+			setClamp(CLAMP_OPEN);
+			} else if (joystick.joy2_TopHat==0) {
+			servo[Drop]=servo[Drop]-1;
+			wait10Msec(1);
 			} else if (joystick.joy2_TopHat==4) {
-			servo[Winch]=WINCH_DOWN;
+			servo[Drop]=servo[Drop]+1;
+			wait10Msec(1);
+		}
+
+		if(joy2Btn(btn_B)&&servo[Drop]!=SCOOP_UP){
+			setClamp(CLAMP_OPEN);
+		} else if(servo[Drop]>SCOOP_LEVEL||servo[Drop]<SCOOP_LEVEL-20){
+			setClamp(CLAMP_DOWN);
 		}
 
 		if(joystick.joy2_TopHat==2)
@@ -383,20 +398,27 @@ task main()
 
 		if(joy1Btn(btn_RB)&&out){
 			StopTask(closeGrip);
+			StopTask(fixStuff);
 			StartTask(openGrip);
 			} else if (joy1Btn(btn_LB)){
 			StopTask(openGrip);
+			StopTask(fixStuff);
 			StopTask(closeGrip);
 			servo[AlignServo2]=ALIGN_2_OUT;
 			if(servo[AlignServo1]==ALIGN_1_IN)
 			{
-			wait10Msec(15);
-		}
+				wait10Msec(15);
+			}
 			servo[AlignServo1]=ALIGN_1_OUT;
 			out=true;
 			} else if (joy1Btn(btn_RT)&&servo[AlignServo1]!=ALIGN_1_IN&&servo[AlignServo2]!=ALIGN_2_IN){
 			StopTask(openGrip);
+			StopTask(fixStuff);
 			StartTask(closeGrip);
+			} else if (joy1Btn(btn_LT)&&servo[AlignServo1]!=ALIGN_1_IN&&servo[AlignServo2]!=ALIGN_2_IN){
+			StopTask(openGrip);
+			StopTask(closeGrip);
+			StartTask(fixStuff);
 		}
 	}
 }

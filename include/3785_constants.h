@@ -17,3 +17,12 @@ const int AUTO_LIFT_INIT=110;
 const int AUTO_TWIST_INIT=0;
 const int AUTO_LIFT_DROP=230;
 const int AUTO_TWIST_DROP=190;
+
+const int ALIGN_1_OUT=190;
+const int ALIGN_2_OUT=65;
+
+const int ALIGN_1_IN=35;
+const int ALIGN_2_IN=205;
+
+const int ALIGN_1_GRIP=145;
+const int ALIGN_2_GRIP=118;

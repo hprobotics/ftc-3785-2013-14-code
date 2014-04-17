@@ -1,4 +1,4 @@
-int leftTargets[4] = {16, 32.5, 78.5, 90.5};
+int leftTargets[4] = {16, 32.5, 76, 87};
 
 void leftDropAtPos(int idx)//The position in which to drop the cube
 {
@@ -31,8 +31,9 @@ void leftDropAtPos(int idx)//The position in which to drop the cube
 		leftSpeed(currentPower);
 		if(!distanceNotTraveled(encoder)){
 			int pos = HTIRS2readACDir(LeftIRSensor);
+			pos = pos==0?10:pos;
 			writeDebugStreamLine("ir: %i",pos);
-			if(pos>4&&idx<(closeGoal?1:3)&&counter<3&&(closeGoal?position<3:true)) {
+			if(pos>4&&idx<(closeGoal-1)&&counter<3) {
 				idx++;
 				counter++;
 				encoder=inchesToEncoder(leftTargets[idx]);
@@ -49,10 +50,10 @@ void leftDropAtPos(int idx)//The position in which to drop the cube
 	dropCube();
 	lowerCube();
 	straight(75,leftTargets[idx]);//drive forwards at 75% power the same distance it went backwards.
-	turnRight(-75,1750);//turn right 90 degrees
+	turnRight(-75,1650);//turn right 90 degrees
 	straight(75,62);//go straight
-	turnRight(-75,1300);//turn on the ramp
-	straight(75,70);//go onto the ramp
+	turnRight(-75,1400);//turn on the ramp
+	straight(75,73);//go onto the ramp
 }
 void leftOuterCrate1()
 {
@@ -109,10 +110,11 @@ void rightDropAtPos(int idx)//The position in which to drop the cube
 		}
 		rightSpeed(currentPower);
 		leftSpeed(currentPower);
+
 		if(!distanceNotTraveled(encoder)){
 			int pos = HTIRS2readACDir(LeftIRSensor);
 			writeDebugStreamLine("ir: %i",pos);
-			if(pos<4&&idx>(closeGoal?2:0)&&counter<3&&(closeGoal?position>3:true)) {
+			if(pos<4&&idx>(4-closeGoal)&&counter<3) {
 				idx--;
 				counter++;
 				encoder=inchesToEncoder(rightTargets[idx]);
@@ -130,10 +132,10 @@ void rightDropAtPos(int idx)//The position in which to drop the cube
 	dropCube();
 	lowerCube();
 	straight(-75,rightTargets[idx]);//drive forwards at 75% power the same distance it went backwards.
-	turnRight(75,1600);//turn right 90 degrees
+	turnRight(75,1500);//turn right 90 degrees
 	straight(-75,60);//go straight
-	turnRight(75,1300);//turn on the ramp
-	straight(-75,60);//go onto the ramp
+	turnRight(75,1400);//turn on the ramp
+	straight(-75,67);//go onto the ramp
 }
 
 void rightOuterCrate1()
